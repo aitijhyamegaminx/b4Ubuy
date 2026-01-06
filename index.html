@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>B4UBuy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="app.css" />
+</head>
+
+<body>
+    <div class="phone-frame">
+        <!-- Screen 1: Splash -->
+        <div class="screen active" id="screen-splash">
+            <div class="logo-wrap">
+                <div class="logo">🛒</div>
+                <h1>B4UBuy</h1>
+                <p class="subtitle">One thing to know before you buy.</p>
+                <button class="btn btn-primary" onclick="showScreen('screen-welcome')">
+                    Get started
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 2: Welcome / Sign in -->
+        <div class="screen" id="screen-welcome">
+            <h2>Welcome</h2>
+            <p class="subtitle"><br>Sign in to continue</p>
+
+            <div class="field">
+                <label>Phone or Email</label>
+                <input id="signin-contact" type="text" placeholder="Enter your phone or email" />
+            </div>
+
+            <div class="field">
+                <label>Name</label>
+                <input id="signin-name" type="text" placeholder="Your name" />
+            </div>
+
+            <div class="bottom-area">
+                <div class="nav-bar">
+                    <button class="btn btn-secondary" onclick="showScreen('screen-splash')">
+                        Previous
+                    </button>
+                    <button class="btn btn-primary" onclick="showScreen('screen-shop')">
+                        Next
+                    </button>
+                </div>
+                <p class="small-text">
+                    By continuing, you agree to our <span class="link">Terms</span> &amp;
+                    <span class="link">Privacy Policy</span>.
+                </p>
+            </div>
+        </div>
+
+        <!-- Screen 3: Shop together -->
+        <div class="screen" id="screen-shop">
+            <h2 class="section-title">Shop together</h2>
+            <p class="section-subtitle">
+                <br>
+                Add family, roommates, or friends to share your cart and split costs.
+            </p>
+
+            <!-- group tags -->
+            <div class="field">
+                <label>Group</label>
+                <div class="group-tags" id="group-tags">
+                    <div class="tag active" data-value="Family">Family</div>
+                    <div class="tag" data-value="Friends">Friends</div>
+                    <div class="tag" data-value="Flatmates">Flatmates</div>
+                    <div class="tag" data-value="Custom">Custom</div>
+                </div>
+                <div class="custom-group-input" id="custom-group-wrap">
+                    <input id="custom-group-name" type="text" placeholder="Enter custom group name" />
+                </div>
+            </div>
+
+            <!-- group member 1 label -->
+            <div class="group-member-label">Member 1</div>
+
+            <div id="people-container">
+                <div class="person-block">
+                    <div class="field">
+                        <label>Name</label>
+                        <input type="text" class="person-name" placeholder="Name" />
+                    </div>
+                    <div class="field">
+                        <label>Phone or email</label>
+                        <input type="text" class="person-contact" placeholder="Phone or email" />
+                    </div>
+                </div>
+            </div>
+
+            <div class="inline-add" onclick="addPerson()">
+                <span class="plus">+</span>
+                <span>Add another person</span>
+            </div>
+
+            <div class="bottom-area" style="margin-top: 6px;">
+                <div class="nav-bar">
+                    <button class="btn btn-secondary" onclick="showScreen('screen-welcome')">
+                        Previous
+                    </button>
+                    <button class="btn btn-primary" onclick="saveAndContinue()">
+                        Save &amp; Continue
+                    </button>
+                </div>
+                <button class="btn btn-text" onclick="skipForNow()">
+                    Skip for now
+                </button>
+            </div>
+        </div>
+
+        <!-- Screen 4: Shopping List -->
+        <div class="screen shop-screen" id="screen-shopping">
+            <!-- Header -->
+            <div class="header">
+                <div class="header-top">
+                    <div class="user-section">
+                        <div class="avatar" id="user-avatar">S</div>
+                        <div>
+                            <div class="header-label">Shopping list for</div>
+                            <div class="header-name" id="user-name">Satyam</div>
+                        </div>
+                    </div>
+                    <div class="bell-icon">🔔</div>
+                </div>
+
+                <!-- Search Bar -->
+                <div class="search-bar">
+                    <input type="text" id="search-input" placeholder="Search for products..." />
+                </div>
+            </div>
+
+            <!-- Help Card -->
+            <div class="help-card">
+                <div class="help-icon">💡</div>
+                <div class="help-content">
+                    <h3>Help me build my list</h3>
+                    <p>Get ingredient suggestions for a dish or within your budget</p>
+                    <a href="#" class="help-link">Get started →</a>
+                </div>
+            </div>
+
+            <!-- Category Filters -->
+            <div class="category-scroll" id="category-scroll">
+                <button class="category-btn active" data-category="All">All</button>
+            </div>
+
+            <!-- Filter and NutriMax Row -->
+            <div class="filter-row">
+                <button class="filter-toggle-btn" id="filter-btn" onclick="toggleFilterModal()">
+                    🎛️ Filters
+                </button>
+                <button class="nutrimax-toggle" id="nutrimax-toggle" onclick="toggleNutriMax()">
+                    ⭐ NutriMax
+                </button>
+            </div>
+
+            <!-- Filter Modal -->
+            <div class="filter-modal" id="filter-modal">
+                <div class="filter-header">
+                    <h3>Filters</h3>
+                    <button class="close-btn" onclick="toggleFilterModal()">✕</button>
+                </div>
+
+                <div class="filter-content">
+                    <!-- Diet Preferences -->
+                    <div class="filter-section">
+                        <h4>Diet Preferences</h4>
+                        <div class="filter-tags" id="diet-filters">
+                            <div class="filter-tag" data-diet="No cholesterol">No cholesterol</div>
+                            <div class="filter-tag" data-diet="No gluten">No gluten</div>
+                            <div class="filter-tag" data-diet="Vegan">Vegan</div>
+                            <div class="filter-tag" data-diet="No GMOs">No GMOs</div>
+                            <div class="filter-tag" data-diet="Plant-based">Plant-based</div>
+                            <div class="filter-tag" data-diet="No added sugar">No added sugar</div>
+                            <div class="filter-tag" data-diet="High proteins">High proteins</div>
+                            <div class="filter-tag" data-diet="No preservatives">No preservatives</div>
+                            <div class="filter-tag" data-diet="Low or no Sodium">Low/No Sodium</div>
+                            <div class="filter-tag" data-diet="No artificial colors">No artificial colors</div>
+                            <div class="filter-tag" data-diet="No artificial preservatives">No artificial preservatives
+                            </div>
+                            <div class="filter-tag" data-diet="No artificial flavors">No artificial flavors</div>
+                            <div class="filter-tag" data-diet="No artificial sweeteners">No artificial sweeteners</div>
+                            <div class="filter-tag" data-diet="No trans fat">No trans fat</div>
+                            <div class="filter-tag" data-diet="No lactose">No lactose</div>
+                            <div class="filter-tag" data-diet="High fibres">High fibres</div>
+                            <div class="filter-tag" data-diet="No palm oil">No palm oil</div>
+                        </div>
+                    </div>
+
+                    <!-- Allergens -->
+                    <div class="filter-section">
+                        <h4>Exclude Allergens</h4>
+                        <div class="filter-tags" id="allergen-filters">
+                            <div class="filter-tag" data-allergen="gluten">Gluten</div>
+                            <div class="filter-tag" data-allergen="milk">Milk</div>
+                            <div class="filter-tag" data-allergen="soybeans">Soybeans</div>
+                            <div class="filter-tag" data-allergen="nuts">Nuts</div>
+                            <div class="filter-tag" data-allergen="mustards">Mustards</div>
+                            <div class="filter-tag" data-allergen="peanuts">Peanuts</div>
+                            <div class="filter-tag" data-allergen="sesame-seeds">Sesame seeds</div>
+                            <div class="filter-tag" data-allergen="sulphur-dioxide-and-sulphites">Sulphur dioxide</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="filter-footer">
+                    <button class="btn btn-secondary" onclick="clearFilters()">Clear all</button>
+                    <button class="btn btn-primary" onclick="applyFilters()">Apply</button>
+                </div>
+            </div>
+
+            <div class="filter-overlay" id="filter-overlay" onclick="toggleFilterModal()"></div>
+
+
+            <!-- Product Grid -->
+            <div class="products-container" id="products-container">
+                <p style="text-align: center; color: #9ca3af; padding: 20px;">Loading products...</p>
+            </div>
+
+            <!-- Footer with Cart -->
+            <div class="footer">
+                <div class="nav-icons">
+                    <div class="nav-icon">🏠</div>
+                    <div class="nav-icon">🔍</div>
+                </div>
+                <button class="cart-btn" id="cart-btn">
+                    <span>Cart</span>
+                    <span class="cart-count" id="cart-count">0</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+
+</html>
