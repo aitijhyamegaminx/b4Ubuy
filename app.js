@@ -406,28 +406,35 @@ function renderProducts() {
     container.appendChild(grid);
 }
 
+// Save cart to localStorage whenever it changes
+function saveCartToStorage() {
+    localStorage.setItem('b4ubuy_cart', JSON.stringify(cart));
+    localStorage.setItem('b4ubuy_products', JSON.stringify(csvData));
+}
+
+// Call this after every cart update
 function addToCart(productId, productName) {
     cart[productId] = 1;
     updateCartCount();
+    saveCartToStorage(); // ADD THIS
     renderProducts();
-    console.log(`Added ${productName} to cart`);
 }
 
 function incrementCart(productId) {
     cart[productId] = (cart[productId] || 0) + 1;
     updateCartCount();
+    saveCartToStorage(); // ADD THIS
     renderProducts();
 }
 
 function decrementCart(productId) {
-    if (cart[productId] > 1) {
-        cart[productId]--;
-    } else {
-        delete cart[productId];
-    }
+    if (cart[productId] > 1) cart[productId]--;
+    else delete cart[productId];
     updateCartCount();
+    saveCartToStorage(); // ADD THIS
     renderProducts();
 }
+
 
 function updateCartCount() {
     const cartCountEl = document.getElementById("cart-count");
