@@ -1,4 +1,4 @@
-// Load cart from localStorage (or use global cart object if on same domain)
+// Load cart from localStorage
 let cart = JSON.parse(localStorage.getItem('b4ubuy_cart')) || {};
 let products = JSON.parse(localStorage.getItem('b4ubuy_products')) || [];
 
@@ -11,17 +11,22 @@ function goBack() {
     window.history.back();
 }
 
+function sanitizeFilename(str) {
+    if (!str) return 'default';
+    return str.toLowerCase().trim().replace(/\s+/g, '_');
+}
+
 function loadCartItems() {
     const container = document.getElementById("cart-items");
     const cartKeys = Object.keys(cart);
 
     if (cartKeys.length === 0) {
         container.innerHTML = `
-      <div class="empty-cart">
-        <div class="empty-cart-icon">🛒</div>
-        <p>Your cart is empty</p>
-      </div>
-    `;
+            <div class="empty-cart">
+                <div class="empty-cart-icon">🛒</div>
+                <p>Your cart is empty</p>
+            </div>
+        `;
         return;
     }
 
@@ -36,28 +41,36 @@ function loadCartItems() {
         if (!product) return;
 
         const nutriGrade = getNutriGrade(product);
-        const nutriColor = getNutriColor(nutriGrade);
+        
+        // Create product-specific image path with fallback
+        const productNameSanitized = sanitizeFilename(product.product_name_en);
+        const productImagePath = `images/${productNameSanitized}.jpg`;
 
         const item = document.createElement("div");
         item.className = "cart-item";
 
         item.innerHTML = `
-      <div class="nutri-indicator nutri-${nutriGrade}"></div>
-      <img class="item-image" src="default.jpg" alt="${product.product_name_en}" />
-      <div class="item-details">
-        <div class="item-name">${product.product_name_en || "N/A"}</div>
-        <div class="item-quantity">${product.quantity || "N/A"}</div>
-        <div class="item-added-by">Added by You</div>
-        <div class="item-footer">
-          <div class="item-price">₹89</div>
-          <div class="qty-control">
-            <button class="qty-btn" onclick="decrementItem('${productId}')">−</button>
-            <div class="qty-display">${quantity}</div>
-            <button class="qty-btn" onclick="incrementItem('${productId}')">+</button>
-          </div>
-        </div>
-      </div>
-    `;
+            <div class="nutri-indicator nutri-${nutriGrade}"></div>
+            <img 
+                class="item-image" 
+                src="${productImagePath}" 
+                onerror="this.src='images/default.jpg'"
+                alt="${product.product_name_en}" 
+            />
+            <div class="item-details">
+                <div class="item-name">${product.product_name_en || "N/A"}</div>
+                <div class="item-quantity">${product.quantity || "N/A"}</div>
+                <div class="item-added-by">Added by You</div>
+                <div class="item-footer">
+                    <div class="item-price">₹89</div>
+                    <div class="qty-control">
+                        <button class="qty-btn" onclick="decrementItem('${productId}')">−</button>
+                        <div class="qty-display">${quantity}</div>
+                        <button class="qty-btn" onclick="incrementItem('${productId}')">+</button>
+                    </div>
+                </div>
+            </div>
+        `;
 
         container.appendChild(item);
     });
@@ -69,17 +82,6 @@ function getNutriGrade(product) {
         grade = 'd';
     }
     return grade;
-}
-
-function getNutriColor(grade) {
-    const colors = {
-        'a': '#038153',
-        'b': '#85bb2f',
-        'c': '#fecb02',
-        'd': '#ee8100',
-        'e': '#e63e11'
-    };
-    return colors[grade] || colors['d'];
 }
 
 function incrementItem(productId) {

@@ -47,6 +47,13 @@ document.addEventListener("DOMContentLoaded", () => {
     setupFilterListeners();
 });
 
+// Add this after line 10 (after nutriMaxActive = false)
+function sanitizeFilename(str) {
+    if (!str) return 'default';
+    return str.toLowerCase().trim().replace(/\s+/g, '_');
+}
+
+
 function addPerson() {
     const container = document.getElementById("people-container");
     const block = document.createElement("div");
@@ -371,17 +378,27 @@ function renderProducts() {
         const productId = `${product.product_name_en}_${product.brands}`.replace(/[^a-zA-Z0-9]/g, '_');
         const quantity = cart[productId] || 0;
         const nutriGrade = getNutriGrade(product);
-        const nutriBadgePath = `images/nutri_${nutriGrade}.png`;
+        const nutriBadgePath = `images/nutriscore_${nutriGrade}.png`;
 
         const card = document.createElement("div");
         card.className = "product-card";
 
+        const productNameSanitized = sanitizeFilename(product.product_name_en);
+        const productImagePath = `images/${productNameSanitized}.jpg`;
+        console.log(`Looking for image: ${productImagePath}`);
         let cardContent = `
-        <img class="product-image" src="images/default.jpg" alt="${product.product_name_en || 'Product'}" />
+        <img 
+            class="product-image" 
+            src="${productImagePath}" 
+            onerror="this.onerror=null; this.src='images/default.jpg';"
+            alt="${product.product_name_en || 'Product'}"
+        />
+        <div class="product-info">
+    
+           
         <div class="product-info">
           <div class="product-name">${product.product_name_en || "N/A"}</div>
-          <div class="product-brand">${product.brands || "N/A"}</div>
-          <div class="product-quantity">${product.quantity || "N/A"}</div>
+          <div class="product-quantity">${product.quantity || ""}</div>
           <div class="product-footer">
             <img class="nutri-badge" src="${nutriBadgePath}" alt="Nutri ${nutriGrade.toUpperCase()}" onerror="this.style.display='none'" />
       `;
@@ -517,17 +534,25 @@ function renderSearchResults(results) {
         const productId = `${product.product_name_en}_${product.brands}`.replace(/[^a-zA-Z0-9]/g, '_');
         const quantity = cart[productId] || 0;
         const nutriGrade = getNutriGrade(product);
-        const nutriBadgePath = `images/nutri_${nutriGrade}.png`;
+        const nutriBadgePath = `images/nutriscore_${nutriGrade}.png`;
 
         const card = document.createElement("div");
         card.className = "product-card";
 
+        const productNameSanitized = sanitizeFilename(product.product_name_en);
+        const productImagePath = `images/${productNameSanitized}.jpg`;
+        
         let cardContent = `
-        <img class="product-image" src="default.jpg" alt="${product.product_name_en || 'Product'}" />
+        <img 
+            class="product-image" 
+            src="${productImagePath}" 
+            onerror="this.onerror=null; this.src='images/default.jpg';"
+            alt="${product.product_name_en || 'Product'}"
+        />
+    
         <div class="product-info">
           <div class="product-name">${product.product_name_en || "N/A"}</div>
-          <div class="product-brand">${product.brands || "N/A"}</div>
-          <div class="product-quantity">${product.quantity || "N/A"}</div>
+          <div class="product-quantity">${product.quantity || ""}</div>
           <div class="product-footer">
             <img class="nutri-badge" src="${nutriBadgePath}" alt="Nutri ${nutriGrade.toUpperCase()}" onerror="this.style.display='none'" />
       `;

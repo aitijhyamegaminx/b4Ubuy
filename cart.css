@@ -30,7 +30,7 @@ body {
 .cart-header {
     display: flex;
     align-items: center;
-    padding: 20px 16px;
+    padding: 10px 13px;
     border-bottom: 1px solid #f3f4f6;
     flex-shrink: 0;
 }
@@ -70,9 +70,9 @@ body {
 
 .cart-item {
     display: flex;
-    gap: 12px;
-    margin-bottom: 16px;
-    padding-bottom: 16px;
+    gap: 10px;
+    margin-bottom: 12px;
+    padding-bottom: 12px;
     border-bottom: 1px solid #f3f4f6;
 }
 
@@ -80,6 +80,7 @@ body {
     width: 4px;
     border-radius: 2px;
     flex-shrink: 0;
+    height: 60px;
 }
 
 .nutri-a {
@@ -103,11 +104,11 @@ body {
 }
 
 .item-image {
-    width: 70px;
-    height: 70px;
+    width: 45px;
+    height: 60px;
     border-radius: 8px;
     object-fit: cover;
-    background: #f3f4f6;
+    background: #fff;
     flex-shrink: 0;
 }
 
@@ -115,25 +116,27 @@ body {
     flex: 1;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
 }
 
 .item-name {
-    font-size: 14px;
+    font-size: 12px;
     font-weight: 600;
     color: #111827;
     margin-bottom: 2px;
+    line-height: 1.2;
 }
 
 .item-quantity {
-    font-size: 12px;
+    font-size: 10px;
     color: #9ca3af;
-    margin-bottom: 4px;
+    margin-bottom: 0px;
 }
 
 .item-added-by {
-    font-size: 11px;
+    font-size: 10px;
     color: #9ca3af;
-    margin-bottom: 8px;
+    margin-bottom: 2px;
 }
 
 .item-footer {
@@ -143,7 +146,7 @@ body {
 }
 
 .item-price {
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 700;
     color: #111827;
 }
@@ -151,20 +154,20 @@ body {
 .qty-control {
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 5px;
     background: #f9fafb;
     border: 1px solid #e5e7eb;
     border-radius: 8px;
-    padding: 4px 8px;
+    padding: 3px 3px;
 }
 
 .qty-btn {
-    width: 24px;
-    height: 24px;
+    width: 14px;
+    height: 14px;
     border: none;
     background: transparent;
     cursor: pointer;
-    font-size: 16px;
+    font-size: 13px;
     font-weight: 600;
     color: #6b7280;
 }
@@ -177,72 +180,62 @@ body {
     font-weight: 600;
 }
 
-/* Footer */
-.cart-footer {
+/* Combined Total and Lock Button (side by side) */
+.total-section {
     padding: 16px;
     border-top: 1px solid #e5e7eb;
+    background: #fff;
     flex-shrink: 0;
-}
-
-.total-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    margin-bottom: 16px;
+    gap: 12px;
+}
+
+.total-info {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
 }
 
 .total-label {
-    font-size: 18px;
+    font-size: 14px;
     font-weight: 600;
-    color: #111827;
+    color: #6b7280;
 }
 
 .total-amount {
     font-size: 22px;
-    font-weight: 700;
+    font-weight: 600;
     color: #111827;
 }
 
 .lock-btn {
-    width: 100%;
     background: #020617;
     color: #fff;
     border: none;
     border-radius: 999px;
-    padding: 14px 20px;
-    font-size: 14px;
+    padding: 10px 18px;
+    font-size: 12px;
     font-weight: 600;
     cursor: pointer;
     display: flex;
     align-items: center;
     justify-content: center;
-    gap: 8px;
+    gap: 6px;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 
 .lock-count {
     background: #16a34a;
-    padding: 2px 8px;
-    border-radius: 12px;
-    font-size: 12px;
-    min-width: 24px;
+    padding: 2px 6px;
+    border-radius: 10px;
+    font-size: 11px;
+    min-width: 20px;
     text-align: center;
 }
 
-/* Bottom Nav */
-.bottom-nav {
-    display: flex;
-    justify-content: center;
-    gap: 32px;
-    padding: 12px;
-    border-top: 1px solid #e5e7eb;
-    flex-shrink: 0;
-}
-
-.nav-icon {
-    font-size: 22px;
-    cursor: pointer;
-    opacity: 0.6;
-}
 
 /* Scrollbar */
 .cart-items::-webkit-scrollbar {
