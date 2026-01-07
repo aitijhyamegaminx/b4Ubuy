@@ -4,7 +4,6 @@ function loadProducts() {
     return JSON.parse(localStorage.getItem('b4ubuy_products')) || [];
 }
 
-
 document.addEventListener("DOMContentLoaded", () => {
     pruneUnknownCartItems();
     loadCartItems();
@@ -85,6 +84,7 @@ function loadCartItems() {
 
         container.appendChild(item);
     });
+    if (window.analyzeCart) analyzeCart();
 }
 
 function getNutriGrade(product) {
@@ -100,6 +100,7 @@ function incrementItem(productId) {
     saveCart();
     loadCartItems();
     updateTotals();
+    if (window.analyzeCart) analyzeCart();
 }
 
 function decrementItem(productId) {
@@ -111,6 +112,7 @@ function decrementItem(productId) {
     saveCart();
     loadCartItems();
     updateTotals();
+    if (window.analyzeCart) analyzeCart();
 }
 
 function saveCart() {
@@ -150,4 +152,48 @@ function updateTotals() {
     document.getElementById("item-count").textContent = `${totalItems} items`;
     document.getElementById("total-amount").textContent = `₹${totalAmount}`;
     document.getElementById("lock-count").textContent = totalItems;
+}
+
+// Lock cart function - saves cart and navigates to final shopping
+function lockCart() {
+    const cartObj = JSON.parse(localStorage.getItem('b4ubuy_cart') || '{}');
+    const products = JSON.parse(localStorage.getItem('b4ubuy_products') || '[]');
+    
+    // Build locked cart items array
+    const lockedItems = [];
+    
+    for (const productId in cartObj) {
+        const quantity = cartObj[productId];
+        if (quantity > 0) {
+            const product = products.find(p => {
+                const pid = `${p.product_name_en}_${p.brands}`.replace(/[^a-zA-Z0-9]/g, '_');
+                return pid === productId;
+            });
+            
+            if (product) {
+                lockedItems.push({
+                    id: productId,
+                    name: product.product_name_en || 'Unknown Product',
+                    quantity: quantity,
+                    packageQuantity: product.quantity || 'N/A',
+                    nutriscore: (product['off:nutriscore_grade'] || 'd').toLowerCase(),
+                    brands: product.brands || '',
+                    picked: false  // For shopping list tracking
+                });
+            }
+        }
+    }
+    
+    if (lockedItems.length === 0) {
+        alert('Your cart is empty! Add items before locking.');
+        return;
+    }
+    
+    // Save locked cart to localStorage
+    localStorage.setItem('b4ubuy_locked_cart', JSON.stringify(lockedItems));
+    
+    console.log(`✅ Locked ${lockedItems.length} items`);
+    
+    // Navigate to final shopping page
+    window.location.href = 'final_shopping.html';
 }

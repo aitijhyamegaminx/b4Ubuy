@@ -17,24 +17,53 @@
             <div class="item-count" id="item-count">0 items</div>
         </div>
 
-        <!-- Cart Items -->
-        <div class="cart-items" id="cart-items">
-            <!-- Items will be loaded here -->
+        <!-- Scrollable content -->
+        <div class="cart-scroll">
+            <div class="cart-items" id="cart-items"></div>
+
+            <!-- AI INSIGHTS -->
+            <div id="excellent-banner" class="excellent-banner hidden">
+                <div class="excellent-icon">✓</div>
+                <div class="excellent-content">
+                    <div class="excellent-message" id="excellent-message"></div>
+                </div>
+            </div>
+
+            <div id="insight-banner" class="insight-banner hidden">
+                <div class="insight-icon" id="insight-icon"></div>
+                <div class="insight-content">
+                    <div class="insight-title" id="insight-description"></div>
+                    <div class="insight-subtitle" id="insight-subtitle"></div>
+
+                    <div class="insight-reco">
+                        Swap to <strong id="insight-swap-name"></strong>
+                    </div>
+
+                    <div id="insight-details" class="insight-details hidden"></div>
+
+                    <div class="insight-actions">
+                        <button class="insight-btn" onclick="ignoreCurrentInsight()">Ignore</button>
+                        <button class="insight-btn primary" onclick="swapCurrentInsight()">Swap</button>
+                    </div>
+                </div>
+            </div>
         </div>
-        <!-- Combined Total and Lock Button -->
+
+        <!-- ✅ FOOTER MUST BE INSIDE PHONE -->
         <div class="total-section">
             <div class="total-info">
                 <span class="total-label">Total</span>
                 <span class="total-amount" id="total-amount">₹0</span>
             </div>
-            <button class="lock-btn" id="lock-btn">
-                Lock Items
-                <span class="lock-count" id="lock-count">0</span>
+            <button class="lock-btn" id="lock-btn" onclick="lockCart()">
+                Lock Items <span class="lock-count" id="lock-count">0</span>
             </button>
         </div>
+    </div>
 
 
-        <script src="cart.js"></script>
+    <script src="cart.js"></script>
+    <script src="cart_insights.js"></script>
 </body>
 
 </html>

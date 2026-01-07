@@ -59,28 +59,19 @@ body {
 .item-count {
     font-size: 14px;
     color: #6b7280;
-    margin-right: 50px;
 }
 
-.app-logo-corner {
-    position: absolute;
-    right: 13px;
-    top: 50%;
-    transform: translateY(-50%);
-}
-
-.app-logo-corner img {
-    width: 32px;
-    height: 32px;
-    border-radius: 6px;
-}
-
-/* Cart Items */
-.cart-items {
-    flex: 1;
+/* Cart Items - SCROLLABLE AREA */
+.cart-scroll {
+    flex: 1 1 auto;
+    min-height: 0;          /* 🔑 CRITICAL */
     overflow-y: auto;
+}
+
+.cart-items {
     padding: 12px 16px;
 }
+
 
 .cart-item {
     display: flex;
@@ -97,25 +88,11 @@ body {
     height: 60px;
 }
 
-.nutri-a {
-    background: #038153;
-}
-
-.nutri-b {
-    background: #85bb2f;
-}
-
-.nutri-c {
-    background: #fecb02;
-}
-
-.nutri-d {
-    background: #ee8100;
-}
-
-.nutri-e {
-    background: #e63e11;
-}
+.nutri-a { background: #038153; }
+.nutri-b { background: #85bb2f; }
+.nutri-c { background: #fecb02; }
+.nutri-d { background: #ee8100; }
+.nutri-e { background: #e63e11; }
 
 .item-image {
     width: 45px;
@@ -194,9 +171,135 @@ body {
     font-weight: 600;
 }
 
-/* Combined Total and Lock Button (side by side) */
+/* AI Insights Section - BELOW CART ITEMS */
+.excellent-banner {
+    background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    padding: 10px 12px;
+    margin: 0 12px 8px 12px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    box-shadow: 0 2px 6px rgba(16, 185, 129, 0.2);
+    flex-shrink: 0;
+}
+
+.excellent-icon {
+    font-size: 20px;
+}
+
+.excellent-content {
+    flex: 1;
+}
+
+.excellent-message {
+    color: #fff;
+    font-size: 12px;
+    font-weight: 600;
+    line-height: 1.4;
+}
+
+.insight-banner {
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 14px;
+    background: #ffffff;
+}
+
+.insight-title {
+    font-size: 14px;
+    font-weight: 600;
+    color: #111827;
+}
+
+
+.insight-reco {
+    margin-top: 10px;
+    font-size: 13px;
+    color: #374151;
+}
+
+.insight-actions {
+    display: flex;
+    gap: 8px;
+    margin-top: 12px;
+}
+
+.insight-btn {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+    border: none;
+    background: #f3f4f6;
+    color: #111827;
+}
+
+.insight-btn:hover {
+    background: #e5e7eb;
+}
+
+.insight-btn.primary {
+    background: #111827;
+    color: white;
+}
+
+.insight-details {
+    margin-top: 12px;
+    padding-top: 10px;
+    border-top: 1px solid #e5e7eb;
+}
+
+.detail-title {
+    font-weight: 600;
+    margin-bottom: 4px;
+}
+
+.toggle-details {
+    background: #6b7280;
+}
+
+.toggle-details:hover {
+    background: #4b5563;
+}
+
+.hidden {
+    display: none !important;
+}
+
+.insight-detail-box {
+    background: #fff7d6;
+    border-radius: 10px;
+    padding: 12px;
+    margin-top: 12px;
+    font-size: 13px;
+    color: #7c2d12;
+}
+
+.detail-current,
+.detail-reco {
+    margin-bottom: 8px;
+}
+
+.detail-arrow {
+    text-align: center;
+    font-size: 16px;
+    margin: 4px 0;
+}
+
+.detail-impact {
+    margin-top: 8px;
+    font-weight: 600;
+    color: #92400e;
+}
+
+.muted {
+    color: #92400e;
+    font-size: 12px;
+}
+
+/* Combined Total and Lock Button */
 .total-section {
-    padding: 16px;
+    padding: 14px 16px;
     border-top: 1px solid #e5e7eb;
     background: #fff;
     flex-shrink: 0;
@@ -249,7 +352,6 @@ body {
     min-width: 20px;
     text-align: center;
 }
-
 
 /* Scrollbar */
 .cart-items::-webkit-scrollbar {
