@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Ingredient Suggestions - B4UBuy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="app.css" />
+</head>
+
+<body>
+<div class="phone-frame">
+    <div class="screen active" id="screen-ingredients">
+
+        <div class="app-logo-corner">
+            <img src="images/logo.jpg" alt="B4UBuy" />
+        </div>
+
+        <div class="ingredients-header">
+            <div class="header-left">
+                <button class="back-btn" onclick="history.back()">&#8592;</button>
+                <h2>Ingredient Suggestions</h2>
+            </div>
+        </div>
+
+        <div class="ingredients-content">
+
+            <!-- Loading -->
+            <div id="loading-state" class="loading-state">
+                <div class="loading-spinner"></div>
+                <p>Finding ingredients for your dish...</p>
+            </div>
+
+            <!-- Ingredients -->
+            <div id="ingredients-section" class="ingredients-section" style="display:none;">
+                <div class="dish-header">
+                    <h3 id="dish-name"></h3>
+                    <p id="dish-description"></p>
+                </div>
+
+                <div class="ingredients-checklist">
+                    <h4>Ingredients needed:</h4>
+                    <div id="ingredients-list" class="ingredients-list"></div>
+                </div>
+
+                <div class="action-section">
+                    <div class="summary-info">
+                        <span id="available-summary"></span>
+                    </div>
+                    <button id="add-all-btn"
+                            class="btn-add-all"
+                            onclick="addSelectedIngredientsToCart()"
+                            disabled>
+                        Add Selected Ingredients to Cart
+                    </button>
+                </div>
+            </div>
+
+            <!-- Error -->
+            <div id="error-state" class="error-state" style="display:none;">
+                <div class="error-icon">😕</div>
+                <h4>No recipes found</h4>
+                <p id="error-message"></p>
+                <button class="btn-primary" onclick="history.back()">Try Again</button>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script src="app.js"></script>
+
+<script>
+let currentIngredients = [];
+let selectedIngredientIndexes = new Set();
+
+/* ---------- INIT ---------- */
+document.addEventListener('DOMContentLoaded', async () => {
+    try {
+        const savedCart = localStorage.getItem('b4ubuy_cart');
+        if (savedCart) cart = JSON.parse(savedCart);
+    } catch {}
+
+    const dishName = sessionStorage.getItem('selectedDish');
+    if (!dishName) {
+        window.location.href = 'build-list.html';
+        return;
+    }
+
+    await loadCSV();
+    await generateIngredients(dishName);
+});
+
+/* ---------- DATA ---------- */
+async function generateIngredients(dishName) {
+    const loading = document.getElementById('loading-state');
+    const section = document.getElementById('ingredients-section');
+    const error = document.getElementById('error-state');
+
+    loading.style.display = 'block';
+    section.style.display = 'none';
+    error.style.display = 'none';
+
+    try {
+        const suggestions = await generateIngredientSuggestions(dishName);
+        loading.style.display = 'none';
+
+        if (!suggestions.success) {
+            error.style.display = 'block';
+            document.getElementById('error-message').textContent = suggestions.message;
+            return;
+        }
+
+        document.getElementById('dish-name').textContent =
+            suggestions.recipeName || dishName;
+
+        document.getElementById('dish-description').textContent =
+            suggestions.description || 'A delicious recipe to try!';
+
+        currentIngredients = suggestions.ingredients;
+        renderIngredientsChecklist(currentIngredients);
+        updateSelectedSummary();
+
+        section.style.display = 'block';
+
+    } catch {
+        loading.style.display = 'none';
+        error.style.display = 'block';
+        document.getElementById('error-message').textContent =
+            'An error occurred while loading recipes.';
+    }
+}
+
+/* ---------- UI ---------- */
+function renderIngredientsChecklist(ingredients) {
+    const container = document.getElementById('ingredients-list');
+    container.innerHTML = '';
+    selectedIngredientIndexes.clear();
+
+    ingredients.forEach((ingredient, index) => {
+        const product = ingredient.bestMatch;
+        const imageUrl = product?.image_url || 'images/default.jpg';
+
+        const row = document.createElement('div');
+        row.className = 'ingredient-item';
+
+        row.innerHTML = `
+            <img class="ingredient-image"
+                 src="${imageUrl}"
+                 onerror="this.src='images/default.jpg'" />
+
+            <div class="ingredient-details">
+                <div class="ingredient-name">
+                    ${product ? product.product_name : ingredient.name}
+                </div>
+            </div>
+
+            <div class="ingredient-action">
+                <button class="ingredient-add-btn"
+                        data-index="${index}"
+                        onclick="toggleIngredientSelection(${index})">
+                    +
+                </button>
+            </div>
+        `;
+
+        container.appendChild(row);
+    });
+}
+
+function toggleIngredientSelection(index) {
+    const btn = document.querySelector(`button[data-index="${index}"]`);
+
+    if (selectedIngredientIndexes.has(index)) {
+        selectedIngredientIndexes.delete(index);
+        btn.textContent = '+';
+        btn.classList.remove('added');
+    } else {
+        selectedIngredientIndexes.add(index);
+        btn.textContent = '✓';
+        btn.classList.add('added');
+    }
+
+    updateSelectedSummary();
+}
+
+function updateSelectedSummary() {
+    const selected = selectedIngredientIndexes.size;
+    const total = currentIngredients.length;
+
+    document.getElementById('available-summary').textContent =
+        `${selected} of ${total} ingredients selected`;
+
+    const btn = document.getElementById('add-all-btn');
+    btn.disabled = selected === 0;
+    btn.style.opacity = selected === 0 ? 0.6 : 1;
+}
+
+/* ---------- CORE FIX ---------- */
+function ensureProductExists(product) {
+    const products = JSON.parse(localStorage.getItem('b4ubuy_products')) || [];
+
+    const id = `${(product.product_name_en || product.product_name || '').trim()}_${(product.brands || 'Fresh').trim()}`
+        .replace(/[^a-zA-Z0-9]/g, '_');
+
+    const exists = products.some(p =>
+        `${(p.product_name_en || '').trim()}_${(p.brands || '').trim()}`
+            .replace(/[^a-zA-Z0-9]/g, '_') === id
+    );
+
+    if (!exists) {
+        products.push({
+            product_name_en: product.product_name_en || product.product_name,
+            brands: product.brands || 'Fresh',
+            quantity: product.quantity || '1 unit',
+            categories: 'Ingredients',
+            countries_en: 'India',
+            stores: 'Available in store',
+            'off:nutriscore_grade': product['off:nutriscore_grade'] || 'd',
+            mock_product: true
+        });
+        localStorage.setItem('b4ubuy_products', JSON.stringify(products));
+    }
+}
+
+/* ---------- ADD TO CART ---------- */
+function addSelectedIngredientsToCart() {
+    let addedCount = 0;
+
+    selectedIngredientIndexes.forEach(index => {
+        const ingredient = currentIngredients[index];
+        if (!ingredient?.bestMatch) return;
+
+        const product = ingredient.bestMatch;
+
+        // ✅ SAME ID FORMAT AS SHOPPING
+        const name = (product.product_name_en || product.product_name || ingredient.name).trim();
+        const brand = (product.brands || 'Fresh').trim();
+        const productId = `${name}_${brand}`.replace(/[^a-zA-Z0-9]/g, '_');
+
+        // ✅ 1. ADD TO CART AS NUMBER
+        if (!cart[productId]) {
+            cart[productId] = 1;
+            addedCount++;
+        }
+
+        // ✅ 2. ENSURE PRODUCT EXISTS FOR CART PAGE
+        const exists = csvData.some(p =>
+            `${(p.product_name_en || '').trim()}_${(p.brands || '').trim()}`
+                .replace(/[^a-zA-Z0-9]/g, '_') === productId
+        );
+
+        if (!exists) {
+            csvData.push({
+                product_name_en: name,
+                brands: brand,
+                quantity: ingredient.quantity || '1 unit',
+                categories: 'Ingredients',
+                countries_en: 'India',
+                stores: 'Available in store',
+                'off:nutriscore_grade': product['off:nutriscore_grade'] || 'd',
+                mock_product: true
+            });
+        }
+    });
+
+    if (addedCount > 0) {
+        updateCartCount();
+        saveCartToStorage();
+
+        const btn = document.getElementById('add-all-btn');
+        btn.textContent = `🛒 Move to Cart (${addedCount})`;
+        btn.onclick = () => {
+            localStorage.setItem('targetScreen', 'screen-shopping');
+            window.location.href = 'index.html';
+        };
+    }
+}
+
+</script>
+</body>
+</html>

@@ -13,9 +13,7 @@
         <!-- Screen 1: Splash -->
         <div class="screen active" id="screen-splash">
             <div class="logo-wrap">
-                <div class="logo">🛒</div>
-                <h1>B4UBuy</h1>
-                <p class="subtitle">One thing to know before you buy.</p>
+                <img src="images/1.jpg" alt="B4UBuy" class="title-image" />
                 <button class="btn btn-primary" onclick="showScreen('screen-welcome')">
                     Get started
                 </button>
@@ -24,8 +22,11 @@
 
         <!-- Screen 2: Welcome / Sign in -->
         <div class="screen" id="screen-welcome">
-            <h2>Welcome</h2>
-            <p class="subtitle"><br>Sign in to continue</p>
+            <div class="app-logo-corner">
+                <img src="images/logo.jpg" alt="B4UBuy"/>
+            </div>
+            <h2>Welcome !</h2>
+            <p class="subtitle"><br><b>Sign in to continue</b></p>
 
             <div class="field">
                 <label>Phone or Email</label>
@@ -34,10 +35,12 @@
 
             <div class="field">
                 <label>Name</label>
-                <input id="signin-name" type="text" placeholder="Your name" />
+                <input id="signin-name" type="text" placeholder="Enter your name" />
             </div>
 
             <div class="bottom-area">
+                <img src="images/2.jpg" alt="Login" class="login-image" />
+
                 <div class="nav-bar">
                     <button class="btn btn-secondary" onclick="showScreen('screen-splash')">
                         Previous
@@ -55,7 +58,10 @@
 
         <!-- Screen 3: Shop together -->
         <div class="screen" id="screen-shop">
-            <h2 class="section-title">Shop together</h2>
+            <div class="app-logo-corner">
+                <img src="images/logo.jpg" alt="B4UBuy"/>
+            </div>
+            <h2 class="section-title">Shop together !</h2>
             <p class="section-subtitle">
                 <br>
                 Add family, roommates, or friends to share your cart and split costs.
@@ -108,6 +114,7 @@
                 <button class="btn btn-text" onclick="skipForNow()">
                     Skip for now
                 </button>
+                <img src="images/4.jpg" alt="Group" class="group-image" />
             </div>
         </div>
 
@@ -123,7 +130,9 @@
                             <div class="header-name" id="user-name">Satyam</div>
                         </div>
                     </div>
-                    <div class="bell-icon">🔔</div>
+                    <div class="app-logo-corner">
+                        <img src="images/logo.jpg" alt="B4UBuy"/>
+                    </div>
                 </div>
 
                 <!-- Search Bar -->
@@ -138,7 +147,7 @@
                 <div class="help-content">
                     <h3>Help me build my list</h3>
                     <p>Get ingredient suggestions for a dish or within your budget</p>
-                    <a href="#" class="help-link">Get started →</a>
+                    <a href="build-list.html" class="help-link">Get started →</a>
                 </div>
             </div>
 
@@ -150,7 +159,7 @@
             <!-- Filter and NutriMax Row -->
             <div class="filter-row">
                 <button class="filter-toggle-btn" id="filter-btn" onclick="toggleFilterModal()">
-                    🎛️ Filters
+                    ⏳ Filters
                 </button>
                 <button class="nutrimax-toggle" id="nutrimax-toggle" onclick="toggleNutriMax()">
                     ⭐ NutriMax
@@ -222,14 +231,10 @@
 
             <!-- Footer with Cart -->
             <div class="footer">
-                <div class="nav-icons">
-                    <div class="nav-icon">🏠</div>
-                    <div class="nav-icon">🔍</div>
-                </div>
-                <button class="cart-btn" id="cart-btn">
+                <button class="cart-btn" id="cart-btn" onclick="window.location.href='cart.html'">
                     <span>Cart</span>
                     <span class="cart-count" id="cart-count">0</span>
-                </button>
+                </button>                  
             </div>
         </div>
     </div>

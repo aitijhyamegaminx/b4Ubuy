@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Your Cart - B4UBuy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="cart.css" />
+</head>
+
+<body>
+    <div class="phone-frame">
+        <!-- Header -->
+        <div class="cart-header">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <h2>Your Cart</h2>
+            <div class="item-count" id="item-count">0 items</div>
+        </div>
+
+        <!-- Cart Items -->
+        <div class="cart-items" id="cart-items">
+            <!-- Items will be loaded here -->
+        </div>
+        <!-- Combined Total and Lock Button -->
+        <div class="total-section">
+            <div class="total-info">
+                <span class="total-label">Total</span>
+                <span class="total-amount" id="total-amount">₹0</span>
+            </div>
+            <button class="lock-btn" id="lock-btn">
+                Lock Items
+                <span class="lock-count" id="lock-count">0</span>
+            </button>
+        </div>
+
+
+        <script src="cart.js"></script>
+</body>
+
+</html>

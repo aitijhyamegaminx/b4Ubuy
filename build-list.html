@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Build Your List - B4UBuy</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <link rel="stylesheet" href="app.css" />
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="screen active" id="screen-build-list">
+            <div class="app-logo-corner">
+                <img src="images/logo.jpg" alt="B4UBuy"/>
+            </div>
+            <div class="cart-header">
+                <div class="header-left">
+                    <button class="back-btn" onclick="history.back()">←</button>
+                    <h2>List for your dish</h2>
+                </div>
+            </div>
+            <br>
+            <div class="build-list-desc">Choose how you'd like to get started</div>
+            <div class="build-list-cards">
+                <div class="build-list-card">
+                    <div class="icon-box" style="background:#e6f9ed;color:#2ecc71;">+</div>
+                    <div class="card-content">
+                        <label for="dish-input" class="card-title">I know what I want to cook</label>
+                        <div class="card-desc">Tell us the dish, and we'll suggest ingredients</div>
+                        <div class="autocomplete-wrapper">
+                            <input class="card-input" id="dish-input" name="dish" type="text" placeholder="e.g., Rawalpindi Style Chole" autocomplete="off" />
+                            <div id="dish-autocomplete" class="autocomplete-container"></div>
+                        </div>
+                        <button class="card-btn">Get ingredients</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script src="app.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const getIngredientsBtn = document.querySelector('.card-btn');
+            const dishInput = document.getElementById('dish-input');
+            
+            // Initialize autocomplete for dish input
+            initializeAutocomplete('dish-input', 'dish-autocomplete');
+            
+            if (getIngredientsBtn && dishInput) {
+                getIngredientsBtn.addEventListener('click', () => {
+                    const dishName = dishInput.value.trim();
+                    if (dishName) {
+                        sessionStorage.setItem('selectedDish', dishName);
+                        window.location.href = 'ingredients.html';
+                    } else {
+                        alert('Please enter a dish name');
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+</html>
