@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Shopping List - B4UBuy</title>
+    <link rel="stylesheet" href="final_shopping.css">
+</head>
+<body>
+    <div class="phone-frame">
+        <div class="shopping-header">
+            <button class="back-btn" onclick="goBack()">←</button>
+            <h2>Shopping List</h2>
+            <div class="item-count" id="item-count"></div>
+        </div>
+        
+        <div class="progress-section">
+            <div class="progress-bar-container">
+                <div class="progress-bar" id="progress-bar"></div>
+            </div>
+            <div class="progress-text" id="progress-text">0 of 0 items picked</div>
+        </div>
+        
+        <div class="shopping-content">
+            <div id="shopping-list" class="shopping-list"></div>
+        </div>
+        
+        <div class="complete-section">
+            <button class="complete-btn" id="complete-btn" onclick="completeShopping()">
+                Complete Shopping
+            </button>
+        </div>
+    </div>
+    
+    <script src="final_shopping.js"></script>
+</body>
+</html>
